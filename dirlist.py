@@ -39,7 +39,8 @@ def get_file_info(directory, output_file, excluded_files):
         print(f"Error opening output file {output_file}: {e}")
 
 if __name__ == "__main__":
-    directory_to_scan = os.path.dirname(os.path.abspath(__file__))
+    directory_to_scan = '.\\' 
+    # os.path.dirname(os.path.abspath(__file__))
     output_file = '!Checksum_SHA1.csv'
 
     excluded_files = ['dirlist.py', output_file]
