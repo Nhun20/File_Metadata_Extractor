@@ -7,7 +7,7 @@ def calculate_sha1(file_path):
     try:
         with open(file_path, 'rb') as f:
             while True:
-                data = f.read(65536)
+                data = f.read(65536)  
                 if not data:
                     break
                 sha1.update(data)
@@ -22,7 +22,7 @@ def get_file_info(directory, output_file, excluded_files):
             for foldername, subfolders, filenames in os.walk(directory):
                 for filename in filenames:
                     if filename in excluded_files:
-                        continue  
+                        continue 
 
                     file_path = os.path.join(foldername, filename)
                     try:
@@ -31,19 +31,24 @@ def get_file_info(directory, output_file, excluded_files):
                         modification_time_str = datetime.fromtimestamp(modification_time).strftime('%Y-%m-%d %H:%M:%S')
                         sha1_hash = calculate_sha1(file_path)
 
-                        f.write(f"{filename}, {modification_time_str}, {file_size},  {sha1_hash}\n")
+                        f.write(f"{filename}, {modification_time_str}, {file_size}, {sha1_hash}\n")
                     except Exception as e:
                         print(f"Error processing file {file_path}: {e}")
-            print(f"Scanning complete. Information written to {output_file}. weep woop")
+            print(f"Scanning complete. Information written to {output_file}.")
     except Exception as e:
         print(f"Error opening output file {output_file}: {e}")
 
 if __name__ == "__main__":
-    directory_to_scan = '.\\' 
-    # os.path.dirname(os.path.abspath(__file__))
-    output_file = '!Checksum_SHA1.csv'
+    directory_to_scan = input("Please enter the directory path you want to scan: ").strip()
 
-    excluded_files = ['dirlist.py', output_file]
+    directory_to_scan = os.path.abspath(directory_to_scan)
 
-    print(f"Scanning directory: {directory_to_scan} beep boop")
-    get_file_info(directory_to_scan, output_file, excluded_files)
+    if not os.path.isdir(directory_to_scan):
+        print(f"The directory '{directory_to_scan}' does not exist.")
+    else:
+        output_file = os.path.join(directory_to_scan, 'file_info.txt')
+
+        excluded_files = [os.path.basename(output_file)]
+
+        print(f"Scanning directory: {directory_to_scan}")
+        get_file_info(directory_to_scan, output_file, excluded_files)
